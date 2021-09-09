@@ -49,6 +49,7 @@ export default {
 
 <style scoped>
 ul {
+  margin: 0 auto;
   grid-column: 1 / -1;
 }
 li {
