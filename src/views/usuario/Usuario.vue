@@ -1,5 +1,5 @@
 <template>
-  <p>User page</p>
+  <input type="text" />
 </template>
 
 <script>
