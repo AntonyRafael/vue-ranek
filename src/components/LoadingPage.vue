@@ -13,7 +13,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .loading {
   text-align: center;
   margin-top: 80px;
