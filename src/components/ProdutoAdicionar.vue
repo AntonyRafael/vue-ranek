@@ -33,6 +33,7 @@ export default {
         preco: "",
         fotos: null,
         descricao: "",
+        vendido: "false",
       },
     };
   },
