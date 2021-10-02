@@ -1,8 +1,21 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://ranekapi.origamid.dev/json/api",
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.token;
+    if (token) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const api = {
   get(endpoint) {
@@ -16,6 +29,17 @@ export const api = {
   },
   put(endpoint, body) {
     return axiosInstance.put(endpoint, body);
+  },
+  login(body) {
+    return axios.post(
+      "http://ranekapilocal.local/wp-json/jwt-auth/v1/token",
+      body
+    );
+  },
+  validateToken() {
+    return axiosInstance.post(
+      "https://ranekapi.origamid.dev/json/jwt-auth/v1/token/validate"
+    );
   },
 };
 

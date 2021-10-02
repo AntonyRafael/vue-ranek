@@ -12,15 +12,27 @@
 <script>
 import TheHeader from "@/components/TheHeader.vue";
 import TheFooter from "@/components/TheFooter.vue";
-
+import { api } from "@/services.js";
 export default {
   components: {
     TheHeader,
     TheFooter,
   },
   setup() {},
+  created() {
+    if (window.localStorage.token) {
+      api
+        .validateToken()
+        .then(() => this.$store.dispatch("getUsuario"))
+        .catch((error) => {
+          console.error(error);
+          window.localStorage.removeItem("token");
+        });
+    }
+  },
 };
 </script>
+
 <style>
 * {
   box-sizing: border-box;
