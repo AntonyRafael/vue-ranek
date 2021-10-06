@@ -32,14 +32,16 @@ export default new Vuex.Store({
       state.usuario_produtos = payload;
     },
     ADD_USUARIO_PRODUTOS(state, payload) {
-      state.usuario_produtos.unshift(payload);
+      state.usuario_produtos.unshit(payload);
     },
   },
   actions: {
     getUsuarioProdutos(context) {
-      api.get(`/produto?usuario_id=${context.state.usuario.id}`).then((r) => {
-        context.commit("UPDATE_USUARIO_PRODUTOS", r.data);
-      });
+      api
+        .get(`/produto?usuario_id=${context.state.usuario.id}`)
+        .then((response) => {
+          context.commit("UPDATE_USUARIO_PRODUTOS", response.data);
+        });
     },
     getUsuario(context) {
       return api.get(`/usuario`).then((response) => {
@@ -50,6 +52,16 @@ export default new Vuex.Store({
     criarUsuario(context, payload) {
       context.commit("UPDATE_USUARIO", { id: payload.email });
       return api.post("/usuario", payload);
+    },
+    logarUsuario(context, payload) {
+      return api
+        .login({
+          username: payload.email,
+          password: payload.senha,
+        })
+        .then((response) => {
+          window.localStorage.token = `Bearer ${response.data.token}`;
+        });
     },
     deslogarUsuario(context) {
       context.commit("UPDATE_USUARIO", {
@@ -66,17 +78,6 @@ export default new Vuex.Store({
       });
       window.localStorage.removeItem("token");
       context.commit("UPDATE_LOGIN", false);
-    },
-
-    logarUsuario(context, payload) {
-      return api
-        .login({
-          username: payload.email,
-          password: payload.password,
-        })
-        .then((r) => {
-          window.localStorage.token = `Bearer ${r.data.token}`;
-        });
     },
   },
 });
