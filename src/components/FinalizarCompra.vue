@@ -5,6 +5,7 @@
       <button @click.prevent="finalizarCompra" class="btn">
         Finalizar Compra
       </button>
+      <ErroNotificacao :erros="erros" />
     </UsuarioForm>
   </section>
 </template>
@@ -36,6 +37,11 @@ export default {
       };
     },
   },
+  data() {
+    return {
+      erros: [],
+    };
+  },
   methods: {
     criarTransacao() {
       return api.post("/transacao", this.compra).then(() => {
@@ -43,16 +49,19 @@ export default {
       });
     },
     async criarUsuario() {
+      this.erros = [];
+
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("getUsuario");
         await this.criarTransacao();
       } catch (error) {
-        console.log(error);
+        this.erros.push(error.response.data.message);
       }
     },
     finalizarCompra() {
+      this.erros = [];
       if (this.$store.state.login) this.criarTransacao();
       else this.criarUsuario();
     },
